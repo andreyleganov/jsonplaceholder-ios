@@ -23,12 +23,29 @@ class UserCell: UITableViewCell {
         return label
     }()
     
+    let emailLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .secondaryLabel
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
+    // MARK: - Content
+    func configureCell(_ user: User) {
+        titleLabel.text = user.name
+        emailLabel.text = user.email
+    }
+    
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         accessoryType = .disclosureIndicator
         contentView.addSubview(titleLabel)
+        contentView.addSubview(emailLabel)
         setNeedsUpdateConstraints()
     }
     
@@ -40,8 +57,12 @@ class UserCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            emailLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            emailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            emailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
         super.updateConstraints()
     }

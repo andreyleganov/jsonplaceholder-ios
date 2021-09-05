@@ -58,8 +58,7 @@ extension UsersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
         
-        let viewController = PhotosViewController()
-        viewController.userId = users[indexPath.row].id
+        let viewController = AlbumsViewController(userId: users[indexPath.row].id)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -74,7 +73,7 @@ extension UsersViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseIdentifier, for: indexPath) as? UserCell else {
             return UITableViewCell()
         }
-        cell.titleLabel.text = users[indexPath.row].name
+        cell.configureCell(users[indexPath.item])
         return cell
     }
 }

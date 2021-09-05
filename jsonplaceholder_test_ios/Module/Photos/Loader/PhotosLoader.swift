@@ -9,6 +9,28 @@ import Foundation
 
 class PhotosLoader {
     
+    func fetchPhotos(albumId: Int, completion: @escaping (Result<[Photo], ServerError>) -> Void) {
+
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/photos") else {
+            completion(.failure(.notFound))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            do {
+                let photos = try JSONDecoder().decode([Photo].self, from: data)
+              
+                completion(.success(photos.filter {$0.albumId == albumId}))
+            } catch {
+                completion(.failure(.requestFailed))
+            }
+        }.resume()
+    }
+    
     func fetchPhotos(userId: Int, completion: @escaping (Result<[Photo], ServerError>) -> Void) {
         fetchAlbums(userId: userId) { result in
             switch result {
@@ -40,7 +62,7 @@ class PhotosLoader {
         }
     }
     
-    func fetchAlbums(userId: Int, completion: @escaping (Result<[Album], ServerError>) -> Void) {
+    private func fetchAlbums(userId: Int, completion: @escaping (Result<[Album], ServerError>) -> Void) {
         guard let url = URL(string: "https://jsonplaceholder.typicode.com/albums") else {
             completion(.failure(.notFound))
             return

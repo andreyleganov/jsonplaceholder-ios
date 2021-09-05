@@ -64,6 +64,12 @@ class PhotoCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Content
+    func configureCell(_ photo: Photo) {
+        titleLabel.text = photo.title
+        imageView.setImage(urlString: photo.url)
+    }
+    
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
